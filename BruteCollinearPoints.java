@@ -25,27 +25,26 @@ public class BruteCollinearPoints {
 
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
-            BruteCollinearPoints.checkPoint(p);
+            if (p == null) {
+                throw new IllegalArgumentException();
+            }
 
             for (int j = i + 1; j < points.length; j++) {
                 Point q = points[j];
-                BruteCollinearPoints.checkPoint(q);
+                if (q == null || q.compareTo(p) == 0) {
+                    throw new IllegalArgumentException();
+                }
 
                 for (int m = j + 1; m < points.length; m++) {
                     Point r = points[m];
-                    BruteCollinearPoints.checkPoint(r);
+                    if (r == null || r.compareTo(q) == 0) {
+                        throw new IllegalArgumentException();
+                    }
 
                     for (int n = m + 1; n < points.length; n++) {
                         Point s = points[n];
-                        BruteCollinearPoints.checkPoint(s);
-
-                        Point[] pqrs = {p, q, r, s};
-                        Arrays.sort(pqrs);
-
-                        for (int k = 1; k < pqrs.length; k++) {
-                            if (pqrs[k-1].compareTo(pqrs[k]) == 0) {
-                                throw new IllegalArgumentException();
-                            }
+                        if (s == null || s.compareTo(r) == 0) {
+                            throw new IllegalArgumentException();
                         }
 
                         double pqSlope = p.slopeTo(q);
@@ -53,17 +52,14 @@ public class BruteCollinearPoints {
                         double psSlope = p.slopeTo(s);
 
                         if (pqSlope == prSlope && prSlope == psSlope) {
+                            Point[] pqrs = {p, q, r, s};
+                            Arrays.sort(pqrs);
+
                             segments.add(new LineSegment(pqrs[0], pqrs[3]));
                         }
                     }
                 }
             }
-        }
-    }
-
-    private static void checkPoint(Point p) {
-        if (p == null) {
-            throw new IllegalArgumentException();
         }
     }
 
