@@ -99,14 +99,14 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        return new PointComparator(this);
+        return new SlopeComparator(this);
     }
 
-    private static class PointComparator implements Comparator<Point> {
+    private static class SlopeComparator implements Comparator<Point> {
 
         private Point p0;
 
-        private PointComparator(Point p0) {
+        private SlopeComparator(Point p0) {
             this.p0 = p0;
         }
 
