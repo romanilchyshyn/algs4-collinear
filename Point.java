@@ -8,8 +8,9 @@
  *
  ******************************************************************************/
 
-import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
+
+import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
 
@@ -59,7 +60,15 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        /* YOUR CODE HERE */
+        if (x == that.x && y == that.y) {
+            return Double.NEGATIVE_INFINITY;
+        } else if (x == that.x) {
+            return Double.POSITIVE_INFINITY;
+        } else if (y == that.y) {
+            return +0.0;
+        } else {
+            return ((double) (that.y - y)) / ((double) (that.x - x));
+        }
     }
 
     /**
@@ -75,7 +84,12 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
-        /* YOUR CODE HERE */
+        int yCompare = Integer.compare(y, that.y);
+        if (yCompare == 0) {
+            return Integer.compare(x, that.x);
+        } else {
+            return yCompare;
+        }
     }
 
     /**
@@ -85,7 +99,22 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        /* YOUR CODE HERE */
+        return new PointComparator(this);
+    }
+
+    private static class PointComparator implements Comparator<Point> {
+
+        private Point p0;
+
+        private PointComparator(Point p0) {
+            this.p0 = p0;
+        }
+
+        public int compare(Point p1, Point p2) {
+            double s1 = p0.slopeTo(p1);
+            double s2 = p0.slopeTo(p2);
+            return Double.compare(s1, s2);
+        }
     }
 
 
@@ -105,6 +134,19 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-        /* YOUR CODE HERE */
+        System.out.println(new Point(0, 0).compareTo(new Point(0, 0)));
+        System.out.println(new Point(0, 2).compareTo(new Point(0, 4)));
+        System.out.println(new Point(2, 0).compareTo(new Point(4, 0)));
+        System.out.println(new Point(1, 2).compareTo(new Point(3, 4)));
+
+        System.out.println(new Point(0, 0).slopeTo(new Point(0, 0)));
+        System.out.println(new Point(0, 2).slopeTo(new Point(0, 4)));
+        System.out.println(new Point(2, 0).slopeTo(new Point(4, 0)));
+        System.out.println(new Point(1, 2).slopeTo(new Point(3, 4)));
+
+
+        Comparator<Point> cmp = new Point(1, 1).slopeOrder();
+        System.out.println(cmp.compare(new Point(0, 0), new Point(0, 0)));
+        System.out.println(cmp.compare(new Point(0, 0), new Point(2, 3)));
     }
 }
