@@ -23,8 +23,6 @@ public class FastCollinearPoints {
             throw new IllegalArgumentException();
         }
 
-        Arrays.sort(points);
-
         // copy with check
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
@@ -54,8 +52,8 @@ public class FastCollinearPoints {
             for (int k = 0; k < sortedPoints.length; k++) {
                 Point curr = sortedPoints[k];
                 double slope = p.slopeTo(curr);
-
-                if (activeSlope != slope || k == sortedPoints.length - 1) {
+                
+                if (activeSlope != slope) {
                     if (4 <= numberOfActiveSlopePoints && p.compareTo(smallestActiveSlopePoint) == 0) {
                         segments.add(new LineSegment(smallestActiveSlopePoint, largestActiveSlopePoint));
                     }
@@ -68,6 +66,10 @@ public class FastCollinearPoints {
                     numberOfActiveSlopePoints++;
                     smallestActiveSlopePoint = FastCollinearPoints.min(smallestActiveSlopePoint, curr);
                     largestActiveSlopePoint = FastCollinearPoints.max(largestActiveSlopePoint, curr);
+
+                    if (k == sortedPoints.length - 1 && 4 <= numberOfActiveSlopePoints && p.compareTo(smallestActiveSlopePoint) == 0) {
+                        segments.add(new LineSegment(smallestActiveSlopePoint, largestActiveSlopePoint));
+                    }
                 }
 
             }
